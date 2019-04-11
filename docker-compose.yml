@@ -1,0 +1,39 @@
+version: '2.1'
+
+services:
+  #config servers
+  mongodb-conf-rs-1:
+    image: mongo:4.0
+    volumes:
+      - ./mongo-config:/etc/mongo
+      - ./mongo-data:/data/db
+      - ./mongo-logs:/var/log/mongodb
+      - ./mongo-initdb:/docker-entrypoint-initdb.d
+      - ./mongo-dump:/data/dump
+    mem_limit: 18g
+    memswap_limit: 0
+    mem_swappiness: 0
+    ports:
+    - 127.0.2.1:27017:27017
+    command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]
+
+
+  mongodb:
+    image: mongo:4.0
+    volumes:
+      - ./mongo-config:/etc/mongo
+      - ./mongo-data:/data/db
+      - ./mongo-logs:/var/log/mongodb
+      - ./mongo-initdb:/docker-entrypoint-initdb.d
+      - ./mongo-dump:/data/dump
+    mem_limit: 18g
+    memswap_limit: 0
+    mem_swappiness: 0
+    ports:
+    - 127.0.2.1:27017:27017
+    command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
