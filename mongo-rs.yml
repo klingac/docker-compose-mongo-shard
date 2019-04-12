@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  mongodb-conf-rs:
+    image: mongo:4.0
+    volumes:
+      - ./mongo-secrets:/etc/mongo/secrets
+    mem_limit: 2g
+    memswap_limit: 0
+    mem_swappiness: 0
+    networks:
+      - default
+    command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]

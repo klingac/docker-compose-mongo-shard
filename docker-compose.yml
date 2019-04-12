@@ -2,49 +2,33 @@ version: '2.1'
 services:
   #config servers
   mongodb-conf-rs-1:
-    image: mongo:4.0
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
     volumes:
       - ./mongo-config/config-rs:/etc/mongo
       - ./mongo-data/mongodb-conf-rs-1:/data/db
       - ./mongo-logs/mongodb-conf-rs-1:/var/log/mongodb
-      - ./mongo-secrets:/etc/mongo/secrets
       - ./mongo-initdb/mongo-initdb:/docker-entrypoint-initdb.d
       - ./scripts/mongo-conf-rs.init.js:/mongo-conf-rs.init.js
-    mem_limit: 2g
-    memswap_limit: 0
-    mem_swappiness: 0
-    networks:
-      - default
-    command: ["mongod", "--config", "/etc/mongo/mongod.conf"]
 
   mongodb-conf-rs-2:
-    image: mongo:4.0
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
     volumes:
       - ./mongo-config/config-rs:/etc/mongo
       - ./mongo-data/mongodb-conf-rs-2:/data/db
       - ./mongo-logs/mongodb-conf-rs-2:/var/log/mongodb
-      - ./mongo-secrets:/etc/mongo/secrets
-    mem_limit: 2g
-    memswap_limit: 0
-    mem_swappiness: 0
-    networks:
-      - default
-    command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]
 
   mongodb-conf-rs-3:
-    image: mongo:4.0
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
     volumes:
       - ./mongo-config/config-rs:/etc/mongo
       - ./mongo-data/mongodb-conf-rs-3:/data/db
       - ./mongo-logs/mongodb-conf-rs-3:/var/log/mongodb
-      - ./mongo-secrets:/etc/mongo/secrets
-    mem_limit: 2g
-    memswap_limit: 0
-    mem_swappiness: 0
-    networks:
-      - default
-    command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]
-
 
   # Mongo router
   # mongos-router-1:
