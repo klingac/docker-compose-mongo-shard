@@ -13,8 +13,8 @@ services:
     mem_limit: 18g
     memswap_limit: 0
     mem_swappiness: 0
-    ports:
-    - 127.0.2.1:27017:27017
+    networks:
+      - default
     command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]
 
 
@@ -29,11 +29,16 @@ services:
     mem_limit: 18g
     memswap_limit: 0
     mem_swappiness: 0
-    ports:
-    - 127.0.2.1:27017:27017
+    networks:
+      - default
     command: ["mongod", "--config", "/etc/mongo/mongod.conf", "--setParameter", "honorSystemUmask=true"]
 
 networks:
   default:
-    external:
-      name: nginx-proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.124.0/28
+  # proxy-tier:
+  #   external:
+  #     name: proxy_default
