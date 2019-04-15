@@ -11,6 +11,7 @@ services:
       - ./mongo-logs/mongodb-conf-rs-1:/var/log/mongodb
       - ./mongo-initdb/mongo-initdb:/docker-entrypoint-initdb.d
       - ./scripts/mongo-conf-rs.init.js:/mongo-conf-rs.init.js
+      - ./scripts/mongo-auth.admin.init.js:/mongo-auth.admin.init.js
 
   mongodb-conf-rs-2:
     extends:
@@ -88,20 +89,40 @@ services:
       - ./mongo-data/mongodb-sh-2-rs-3:/data/db
       - ./mongo-logs/mongodb-sh-2-rs-3:/var/log/mongodb
 
-  # Mongo router
-  # mongos-router-1:
-  #   image: mongo:4.0
-  #   command: mongos --port 27018 --configdb config-rs/mongodb-conf-rs-1:27017,mongodb-conf-rs-2:27017,mongodb-conf-rs-3:27017 --keyFile /etc/mongo.key
-  #   volumes:
-  #       - ${PWD}/mongo-utils/mongodb.key:/etc/mongo.key
-  #   ports:
-  #    - "27017:27017"
-  #   networks:
-  #     - default
-  #   depends_on:
-  #     - mongodb-conf-rs-1
-  #     - mongodb-conf-rs-2
-  #     - mongodb-conf-rs-3
+  # mongos
+  mongos-1:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-rs
+    command:
+      - mongos
+      - "--port"
+      - "27017"
+      - "--configdb"
+      - "config-rs/mongodb-conf-rs-1:27019,mongodb-conf-rs-2:27019,mongodb-conf-rs-3:27019"
+      - "--bind_ip_all"
+      # - "--fork"
+      - "--logpath"
+      - "/var/log/mongodb/mongos.log"
+      - "--keyFile"
+      - "/etc/mongo/secrets/mongo.key"
+    volumes:
+      - ./mongo-logs/mongos-1:/var/log/mongodb
+      - ./scripts/mongo-sharding.init.js:/mongo-sharding.init.js
+      - ./scripts/mongo-auth.admin.init.js:/mongo-auth.admin.init.js
+    # command: mongos --configdb config-rs/mongodb-conf-rs-1:27019,mongodb-conf-rs-2:27019,mongodb-conf-rs-3:27019 --keyFile /etc/mongo/secrets/mongo.key
+    ports:
+     - "27017:27017"
+    depends_on:
+      - mongodb-conf-rs-1
+      - mongodb-conf-rs-2
+      - mongodb-conf-rs-3
+      - mongodb-sh-1-rs-1
+      - mongodb-sh-1-rs-2
+      - mongodb-sh-1-rs-3
+      - mongodb-sh-2-rs-1
+      - mongodb-sh-2-rs-2
+      - mongodb-sh-2-rs-3
 
 networks:
   default:
