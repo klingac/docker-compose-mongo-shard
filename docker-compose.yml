@@ -4,7 +4,7 @@ services:
   mongodb-conf-rs-1:
     extends:
       file: mongo-rs.yml
-      service: mongodb-conf-rs
+      service: mongodb-rs
     volumes:
       - ./mongo-config/config-rs:/etc/mongo
       - ./mongo-data/mongodb-conf-rs-1:/data/db
@@ -15,13 +15,71 @@ services:
   mongodb-conf-rs-2:
     extends:
       file: mongo-rs.yml
-      service: mongodb-conf-rs
+      service: mongodb-rs
     volumes:
       - ./mongo-config/config-rs:/etc/mongo
       - ./mongo-data/mongodb-conf-rs-2:/data/db
       - ./mongo-logs/mongodb-conf-rs-2:/var/log/mongodb
 
   mongodb-conf-rs-3:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-rs
+    volumes:
+      - ./mongo-config/config-rs:/etc/mongo
+      - ./mongo-data/mongodb-conf-rs-3:/data/db
+      - ./mongo-logs/mongodb-conf-rs-3:/var/log/mongodb
+
+  mongodb-sh-1-rs-1:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
+    volumes:
+      - ./mongo-config/config-rs:/etc/mongo
+      - ./mongo-data/mongodb-conf-rs-1:/data/db
+      - ./mongo-logs/mongodb-conf-rs-1:/var/log/mongodb
+      - ./mongo-initdb/mongo-initdb:/docker-entrypoint-initdb.d
+      - ./scripts/mongo-conf-rs.init.js:/mongo-conf-rs.init.js
+
+  mongodb-sh-1-rs-2:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
+    volumes:
+      - ./mongo-config/config-rs:/etc/mongo
+      - ./mongo-data/mongodb-conf-rs-2:/data/db
+      - ./mongo-logs/mongodb-conf-rs-2:/var/log/mongodb
+
+  mongodb-sh-1-rs-3:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
+    volumes:
+      - ./mongo-config/config-rs:/etc/mongo
+      - ./mongo-data/mongodb-conf-rs-3:/data/db
+      - ./mongo-logs/mongodb-conf-rs-3:/var/log/mongodb
+
+  mongodb-sh-2-rs-1:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
+    volumes:
+      - ./mongo-config/config-rs:/etc/mongo
+      - ./mongo-data/mongodb-conf-rs-1:/data/db
+      - ./mongo-logs/mongodb-conf-rs-1:/var/log/mongodb
+      - ./mongo-initdb/mongo-initdb:/docker-entrypoint-initdb.d
+      - ./scripts/mongo-conf-rs.init.js:/mongo-conf-rs.init.js
+
+  mongodb-sh-2-rs-2:
+    extends:
+      file: mongo-rs.yml
+      service: mongodb-conf-rs
+    volumes:
+      - ./mongo-config/config-rs:/etc/mongo
+      - ./mongo-data/mongodb-conf-rs-2:/data/db
+      - ./mongo-logs/mongodb-conf-rs-2:/var/log/mongodb
+
+  mongodb-sh-2-rs-3:
     extends:
       file: mongo-rs.yml
       service: mongodb-conf-rs

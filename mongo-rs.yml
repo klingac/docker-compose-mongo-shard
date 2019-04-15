@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  mongodb-conf-rs:
+  mongodb-rs:
     image: mongo:4.0
     volumes:
       - ./mongo-secrets:/etc/mongo/secrets
