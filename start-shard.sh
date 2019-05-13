@@ -25,5 +25,4 @@ docker-compose up -d
 docker-compose exec mongos-1 sh -c "mongo --port 27017 < /mongo-sharding.init.js"
 sleep 3
 
-# docker-compose exec mongodb-conf-rs-1 sh -c "mongo --port 27019 -u admin -p admin --authenticationDatabase admin --host config-rs/mongodb-conf-rs-1:27019,mongodb-conf-rs-2:27019,mongodb-conf-rs-3:27019 < /mongo-auth.admin.init.js"
-docker-compose exec mongos-1 sh -c "mongo --port 27017 < /mongo-auth.admin.init.js"
+source scripts/mongo-auth.admin.sh
